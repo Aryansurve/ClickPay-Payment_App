@@ -4,6 +4,8 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage"; 
 import { Ionicons } from "@expo/vector-icons"; 
+import { BASE_URL } from "../lib/config";
+
 import { userRoute } from "@react-navigation/native";
 const SignInScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -25,7 +27,7 @@ const SignInScreen = ({ navigation }) => {
     }
     setLoading(true);
     try {
-      const response = await fetch("http://192.168.0.143:5000/api/users/login", {
+      const response = await fetch(`${BASE_URL}/api/users/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

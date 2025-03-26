@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { BASE_URL } from "../lib/config";
 
-const BASE_URL = "http://192.168.0.143:5000"; // Update with your backend IP
+// const BASE_URL = "http://192.168.0.143:5000"; // Update with your backend IP
 
 const BusinessList = () => {
     const [businesses, setBusinesses] = useState([]);

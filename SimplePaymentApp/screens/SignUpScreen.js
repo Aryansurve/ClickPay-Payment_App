@@ -16,6 +16,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { BASE_URL } from "../lib/config";
 
 
 const SignUpScreen = ({ navigation }) => {
@@ -42,7 +43,7 @@ const SignUpScreen = ({ navigation }) => {
     try {
       //console.log("📤 Sending Registration Request...");
       
-      const response = await fetch("http://192.168.0.143:5000/api/users/register", {
+      const response = await fetch(`${BASE_URL}/api/users/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -192,8 +192,9 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons"; // Import MaterialIcons
+import { BASE_URL } from "../lib/config";
 
-const BASE_URL = "http://192.168.0.143:5000"; // Your backend URL
+// const BASE_URL = "http://192.168.0.143:5000"; // Your backend URL
 
 const PeopleList = ({ token, senderId, senderName, senderImage }) => {
   // Accept sender details as props

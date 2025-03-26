@@ -11,7 +11,9 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-const BASE_URL = "http://192.168.0.143:5000"; // Update with your backend IP
+import { BASE_URL } from "../lib/config";
+
+// const BASE_URL = "http://192.168.0.143:5000"; // Update with your backend IP
 
 const ProfileScreen = ({ navigation }) => {
   const [user, setUser] = useState(null);

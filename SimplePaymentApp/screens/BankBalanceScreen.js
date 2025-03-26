@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, ActivityIndicator, Alert, StyleSheet } from 'react-native';
+import { BASE_URL } from "../lib/config";
 
-const BASE_URL = "http://192.168.0.143:5000"; // Backend URL
+// const BASE_URL = "http://192.168.0.143:5000"; // Backend URL
 
 const BankBalanceScreen = ({ route, navigation }) => {
   const { token } = route.params;

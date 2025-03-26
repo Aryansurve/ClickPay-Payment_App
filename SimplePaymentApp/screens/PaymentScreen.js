@@ -467,6 +467,7 @@
 
 // export default PaymentScreen;
 
+
 import * as Location from "expo-location";
 import * as LocalAuthentication from "expo-local-authentication";
 import React, { useState, useEffect } from "react";
@@ -484,8 +485,9 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+import { BASE_URL } from "../lib/config";
 
-const BASE_URL = "http://192.168.0.143:5000";
+//const BASE_URL = "http://192.168.0.143:5000";
 
 const PaymentScreen = ({ route }) => {
   const navigation = useNavigation();

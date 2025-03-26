@@ -3,8 +3,9 @@ import { View, Text, Image, StyleSheet, TouchableOpacity, ActivityIndicator, Ale
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { BASE_URL } from "../lib/config";
 
-const BASE_URL = "http://192.168.0.143:5000"; // Backend URL
+// const BASE_URL = "http://192.168.0.143:5000"; // Backend URL
 
 const Header = () => {
   const navigation = useNavigation();
