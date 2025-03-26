@@ -2,9 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Transaction = require("../models/Transaction");
 const Wallet = require("../models/Wallet");
-const authMiddleware = require("../middleware/authMiddleware"); // Middleware to get logged-in user
-
-
+const {authMiddleware} = require("../middleware/authMiddleware"); // Middleware to get logged-in user
 
 // Create a transaction
 router.post("/", async (req, res) => {
@@ -89,5 +87,22 @@ router.delete("/:id", async (req, res) => {
 });
 
 
+router.get("/balance", authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user.id;  // Extracted from token by authMiddleware
+    const wallet = await Wallet.findOne({ userId });
+    console.log("✅ Balance route hit!");
+  console.log("User ID:", req.user.id);
+
+    if (!wallet) {
+      return res.status(404).json({ message: "Wallet not found for this user" });
+    }
+
+    res.json({ balance: wallet.balance });
+  } catch (err) {
+    console.error("Error fetching wallet balance:", err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
 
 module.exports = router;

@@ -6,6 +6,10 @@ import Header from '../components/Header';
 import QuickActions from '../components/QuickAction';
 import PeopleList from '../components/PeopleList';
 import BusinessList from '../components/BusinessList';
+import ManageMoney from '../components/ManageMoney';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+
+
 
 const DashboardScreen = ({ navigation }) => {
   const [token, setToken] = useState(null);
@@ -49,6 +53,8 @@ const DashboardScreen = ({ navigation }) => {
       <PeopleList token={token}/>
       <View style={styles.separator} />
       <BusinessList />
+      <View style={styles.separator} />
+      <ManageMoney navigation={navigation} token={token}/>
     </ScrollView>
   );
 };

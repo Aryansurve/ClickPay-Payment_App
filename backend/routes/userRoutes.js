@@ -396,4 +396,22 @@ router.put("/admin/update-balance/:id", adminAuth, async (req, res) => {
   }
 });
 
+
+// Get user's bank balance
+router.get('/balance', authMiddleware, async (req, res) => {
+  try {
+    const wallet = await Wallet.findOne({ userId: req.user.id });
+
+    if (!wallet) {
+      return res.status(404).json({ message: 'Wallet not found' });
+    }
+
+    res.status(200).json({ balance: wallet.balance });
+  } catch (error) {
+    console.error('Error fetching balance:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
 module.exports = router;

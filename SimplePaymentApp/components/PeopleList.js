@@ -195,7 +195,8 @@ import { MaterialIcons } from "@expo/vector-icons"; // Import MaterialIcons
 
 const BASE_URL = "http://192.168.0.143:5000"; // Your backend URL
 
-const PeopleList = ({ token, senderId, senderName, senderImage }) => { // Accept sender details as props
+const PeopleList = ({ token, senderId, senderName, senderImage }) => {
+  // Accept sender details as props
   const navigation = useNavigation();
   const [people, setPeople] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -267,17 +268,18 @@ const PeopleList = ({ token, senderId, senderName, senderImage }) => { // Accept
       {displayedUsers.map((_, index) =>
         index % 4 === 0 ? (
           <View
-            key={index}
+            key={`row-${index}`}
             style={[
               styles.row,
-              index + 4 >= displayedUsers.length && (displayedUsers.length % 4 <= 2) // Last row with ≤2 users
+              index + 4 >= displayedUsers.length &&
+              displayedUsers.length % 4 <= 2 // Last row with ≤2 users
                 ? styles.lastRow
                 : {},
             ]}
           >
-            {displayedUsers.slice(index, index + 4).map((user) => (
+            {displayedUsers.slice(index, index + 4).map((user, userIndex) => (
               <UserItem
-                key={user?._id}
+                key={`user-${user?._id || userIndex}`}
                 user={user}
                 senderId={senderId} // Pass sender details to UserItem
                 senderName={senderName}
@@ -293,8 +295,14 @@ const PeopleList = ({ token, senderId, senderName, senderImage }) => { // Accept
                 style={styles.userContainer}
                 onPress={() => setShowAll(!showAll)}
               >
-                <MaterialIcons name={showAll ? "expand-less" : "expand-more"} size={35} color="black" />
-                <Text style={styles.userName}>{showAll ? "Show Less" : "Show More"}</Text>
+                <MaterialIcons
+                  name={showAll ? "expand-less" : "expand-more"}
+                  size={35}
+                  color="black"
+                />
+                <Text style={styles.userName}>
+                  {showAll ? "Show Less" : "Show More"}
+                </Text>
               </TouchableOpacity>
             )}
           </View>
@@ -304,30 +312,100 @@ const PeopleList = ({ token, senderId, senderName, senderImage }) => { // Accept
   );
 };
 
+// const UserItem = ({ user, navigation, token }) => {
+//   if (!user) return null;
+//   console.log("DEBUG: User Object:", user); // Debugging log
+
+//   return (
+//     <TouchableOpacity
+//       style={styles.userContainer}
+//       onPress={() => {
+//         console.log(
+//           "DEBUG: Navigating to PaymentScreen with Receiver ID:",
+//           user?._id
+//         );
+//         navigation.navigate("PaymentScreen", {
+//           token,
+//           receiverId: user?._id, // Ensure this is not undefined
+//           receiverName: user?.name,
+//           receiverPhoneNumber: user?.phoneNumber,
+//           receiverimage: user?.image,
+//         });
+//       }}
+//     >
+//       <Image
+//         source={{ uri: `${BASE_URL}${user.image}` }}
+//         style={styles.userImage}
+//       />
+//       <Text style={styles.userName}>{user.name || "Unknown"}</Text>
+//     </TouchableOpacity>
+//   );
+// };
+
+// const UserItem = ({ user, navigation, token }) => {
+//   if (!user) return null;
+
+//   console.log("DEBUG: User Object:", user); // Log user object for debugging
+
+//   const handlePress = () => {
+//     if (!user?._id) {
+//       console.error("ERROR: User ID is missing! Cannot navigate.", user);
+//       return; // Prevent navigation if user._id is missing
+//     }
+
+//     console.log("DEBUG: Navigating to PaymentScreen with Receiver ID:", user._id);
+
+//     navigation.navigate("PaymentScreen", {
+//       token,
+//       receiverId: user._id, // Ensure this is not undefined
+//       receiverName: user?.name || "Unknown",
+//       receiverPhoneNumber: user?.phoneNumber || "N/A",
+//       receiverImage: user?.image || "",
+//     });
+//   };
+
+//   return (
+//     <TouchableOpacity style={styles.userContainer} onPress={handlePress}>
+//       <Image source={{ uri: `${BASE_URL}${user.image}` }} style={styles.userImage} />
+//       <Text style={styles.userName}>{user.name || "Unknown"}</Text>
+//     </TouchableOpacity>
+//   );
+// };
+
 const UserItem = ({ user, navigation, token }) => {
-    if (!user) return null;
-  
-    return (
-      <TouchableOpacity
-        style={styles.userContainer}
-        onPress={() => {
-          console.log("DEBUG: Navigating to PaymentScreen with Receiver ID:", user?._id);
-          navigation.navigate("PaymentScreen", {
-            token,
-            receiverId: user?._id, // Ensure this is not undefined
-            receiverName: user?.name,
-            receiverPhoneNumber: user?.phoneNumber,
-            receiverimage: user?.image,
-          });
-        }}
-        
-      >
-        <Image source={{ uri: `${BASE_URL}${user.image}` }} style={styles.userImage} />
-        <Text style={styles.userName}>{user.name || "Unknown"}</Text>
-      </TouchableOpacity>
-    );
+  if (!user) return null;
+
+  const receiverId = user._id || user.id; // Handle both cases
+
+  // console.log("DEBUG: User Object:", user);
+  // console.log("DEBUG: Extracted Receiver ID:", receiverId); // Check if this is correctly extracted
+
+  const handlePress = () => {
+    if (!receiverId) {
+      console.error("ERROR: User ID is missing! Cannot navigate.", user);
+      return;
+    }
+
+    console.log("DEBUG: Navigating to PaymentScreen with Receiver ID:", receiverId);
+
+    navigation.navigate("PaymentScreen", {
+      token,
+      receiverId, // Use the extracted receiverId
+      receiverName: user?.name || "Unknown",
+      receiverPhoneNumber: user?.phoneNumber || "N/A",
+      receiverImage: user?.image || "",
+    });
   };
-  
+
+  return (
+    <TouchableOpacity style={styles.userContainer} onPress={handlePress}>
+      <Image source={{ uri: `${BASE_URL}${user.image}` }} style={styles.userImage} />
+      <Text style={styles.userName}>{user.name || "Unknown"}</Text>
+    </TouchableOpacity>
+  );
+};
+
+
 
 const styles = StyleSheet.create({
   container: {

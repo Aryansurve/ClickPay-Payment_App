@@ -12,6 +12,7 @@ import WelcomeScreen from './screens/WelcomeScreen';
 import SignInScreen from './screens/SignInScreen';
 import AdminPanel from "./screens/AdminPanel";
 import ExchangeRates from "./screens/ExchangeRatesScreen";
+import BankBalanceScreen from "./screens/BankBalanceScreen";
 // import QRScanner from './components/QRScanner';
 // import OTPVerificationScreen from './screens/OTPVerificationScreen';
 const Stack = createStackNavigator();
@@ -25,6 +26,8 @@ export default function App() {
         <Stack.Screen name="Welcome" component={WelcomeScreen}/>
         <Stack.Screen name="Signup" component={SignUpScreen} /> 
         <Stack.Screen name="Signin" component={SignInScreen} />
+        <Stack.Screen name="BankBalanceScreen" component={BankBalanceScreen} />
+
         {/* <Stack.Screen name="QRScanner" component={QRScanner} /> */}
         {/* <Stack.Screen name="OTPVerificationScreen" component={OTPVerificationScreen} /> */}
         <Stack.Screen name="AdminPanel" component={AdminPanel} />
