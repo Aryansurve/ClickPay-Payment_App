@@ -112,9 +112,9 @@ const Wallet = require("../models/Wallet"); // Import Wallet model
 
 router.post("/send", authenticateUser, async (req, res) => {
   try {
-    const { senderId, receiverId, amount } = req.body;
+    const { senderId, receiverId, amount, location } = req.body;
 
-    if (!senderId || !receiverId || !amount) {
+    if (!senderId || !receiverId || !amount || !location) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
@@ -143,7 +143,9 @@ router.post("/send", authenticateUser, async (req, res) => {
       receiverId,
       amount,
       transactionType: "send", // Ensuring this field is provided
-      status: "completed" // Correct lowercase format
+      status: "completed", // Correct lowercase format
+      location: location, // ✅ Fix syntax error
+
     });
 
     await senderWallet.save();

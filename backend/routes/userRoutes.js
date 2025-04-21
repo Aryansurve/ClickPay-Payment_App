@@ -84,65 +84,6 @@ const generateAvatar = async (name) => {
   }
 };
 
-// ✅ Register User
-// router.post("/register", upload.single("image"), async (req, res) => {
-//   try {
-//     const { name, phoneNumber, email, password, isAdmin } = req.body;
-//     if (!name || !phoneNumber || !email || !password) {
-//       return res.status(400).json({ message: "All fields are required" });
-//     }
-
-//     const existingUser = await User.findOne({ email });
-//     if (existingUser)
-//       return res.status(400).json({ message: "User already exists" });
-
-//     const hashedPassword = await bcrypt.hash(password, 10);
-//     const userUPI = generateUPIID();
-//     const qrCode = await generateQRCode(userUPI);
-
-//     let userImage = req.file
-//       ? `/uploads/${req.file.filename}`
-//       : await generateAvatar(name);
-
-//     const newUser = new User({
-//       name,
-//       phoneNumber,
-//       email,
-//       password: hashedPassword,
-//       userUPIId: userUPI,
-//       qrCode,
-//       image: userImage,
-//       isAdmin: isAdmin === "true" || isAdmin === true,
-
-//     });
-
-//     await newUser.save();
-
-//     // ✅ Create Wallet for the User
-//     const newWallet = new Wallet({
-//       userId: newUser._id,
-//       balance: 10000, // Default balance
-//     });
-//     await newWallet.save();
-
-//     const token = jwt.sign(
-//       { id: newUser._id.toString(), email: newUser.email, isAdmin: newUser.isAdmin },
-//       process.env.JWT_SECRET,
-//       { expiresIn: "7d" }
-//     );
-
-//     res.status(201).json({
-//       message: "User registered successfully",
-//       token,
-//       user: newUser,
-//       wallet: newWallet, // ✅ Return wallet details
-//     });
-//   } catch (err) {
-//     console.error("Error registering user:", err);
-//     res.status(500).json({ message: "Internal server error" });
-//   }
-// });
-
 router.post("/register", upload.single("image"), async (req, res) => {
   try {
     const { name, phoneNumber, email, password, isAdmin } = req.body;
@@ -415,3 +356,66 @@ router.get('/balance', authMiddleware, async (req, res) => {
 
 
 module.exports = router;
+
+
+
+
+
+// const { GridFSBucket } = require("mongodb");
+
+
+// // Initialize GridFS
+// const connection = mongoose.connection;
+// let bucket;
+
+// // Initialize GridFSBucket when the connection is open
+// connection.once("open", () => {
+//   bucket = new GridFSBucket(connection.db, {
+//     bucketName: "userFiles", // Name of the bucket for storing files
+//   });
+// });
+
+// // Generate Unique UPI ID
+// const generateUPIID = () => `user${Date.now()}@xpay`;
+
+// // Generate QR Code for UPI ID
+// const generateQRCode = async (upiID) => {
+//   const qrImage = await QRCode.toBuffer(upiID);
+//   return qrImage;
+// };
+
+// // GPay-like Colors for Avatar
+// const gpayColors = [
+//   "#FBBC05", "#4285F4", "#EA4335", "#34A853", "#FF6D00", "#46BDC6", "#AA00FF", "#8E24AA", "#FF4081", "#795548",
+// ];
+
+// // Generate Avatar
+// const generateAvatar = async (name) => {
+//   try {
+//     const timestamp = Date.now();
+//     const canvas = createCanvas(128, 128);
+//     const ctx = canvas.getContext("2d");
+
+//     const bgColor = gpayColors[Math.floor(Math.random() * gpayColors.length)];
+//     ctx.fillStyle = bgColor;
+//     ctx.fillRect(0, 0, 128, 128);
+
+//     ctx.fillStyle = "#FFFFFF";
+//     ctx.font = "bold 50px Arial";
+//     ctx.textAlign = "center";
+//     ctx.textBaseline = "middle";
+
+//     const firstLetter = name.charAt(0).toUpperCase();
+//     ctx.fillText(firstLetter, 64, 64);
+
+//     const buffer = canvas.toBuffer("image/png");
+
+//     const uploadStream = bucket.openUploadStream(`${timestamp}_avatar.png`);
+//     uploadStream.end(buffer);
+
+//     return uploadStream.id; // Return the GridFS ObjectId of the uploaded avatar
+//   } catch (error) {
+//     console.error("Error generating avatar:", error);
+//     return null;
+//   }
+// };

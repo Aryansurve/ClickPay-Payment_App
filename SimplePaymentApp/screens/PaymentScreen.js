@@ -558,94 +558,87 @@ const PaymentScreen = ({ route }) => {
     const amountToSend = parseFloat(message);
 
     if (isNaN(amountToSend) || amountToSend <= 0) {
-      Alert.alert("Invalid Amount", "Enter a valid payment amount.");
-      return;
+        Alert.alert("Invalid Amount", "Enter a valid payment amount.");
+        return;
     }
 
     if (amountToSend > userBalance) {
-      Alert.alert("Insufficient Balance", "You don't have enough balance.");
-      return;
+        Alert.alert("Insufficient Balance", "You don't have enough balance.");
+        return;
     }
 
     // Request location permission
     const { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
-      Alert.alert(
-        "Permission Denied",
-        "Location access is required to proceed."
-      );
-      return;
+        Alert.alert("Permission Denied", "Location access is required to proceed.");
+        return;
     }
 
     // Fetch current location
     const location = await Location.getCurrentPositionAsync({});
     const senderLocation = {
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
     };
     console.log("Sender Location:", senderLocation);
 
     const biometricAuth = await LocalAuthentication.authenticateAsync({
-      promptMessage: "Authenticate to Proceed with Payment",
-      fallbackLabel: "Use Passcode",
+        promptMessage: "Authenticate to Proceed with Payment",
+        fallbackLabel: "Use Passcode",
     });
 
     if (!biometricAuth.success) {
-      Alert.alert("Authentication Failed", "Biometric verification failed.");
-      return;
+        Alert.alert("Authentication Failed", "Biometric verification failed.");
+        return;
     }
 
-    // ✅ Debugging User ID and Receiver ID
     console.log("DEBUG: Sender ID (userId):", userId);
     console.log("DEBUG: Receiver ID (receiverId):", receiverId);
 
     if (!userId || !receiverId) {
-      Alert.alert(
-        "Missing Required Fields",
-        "Sender or receiver information is missing."
-      );
-      console.error("Payment error: Missing userId or receiverId");
-      return;
+        Alert.alert("Missing Required Fields", "Sender or receiver information is missing.");
+        console.error("Payment error: Missing userId or receiverId");
+        return;
     }
 
     try {
-      console.log("Initiating payment with:", {
-        senderId: userId,
-        receiverId: receiverId,
-        amount: amountToSend,
-        location: senderLocation, // Send location with the transaction
-      });
+        console.log("Initiating payment with:", {
+            senderId: userId,
+            receiverId: receiverId,
+            amount: amountToSend,
+            location: senderLocation, // ✅ Ensure location is sent
+        });
 
-      const response = await fetch(`${BASE_URL}/api/payments/send`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          senderId: userId,
-          receiverId: receiverId,
-          amount: amountToSend,
-        }),
-      });
+        const response = await fetch(`${BASE_URL}/api/payments/send`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+                senderId: userId,
+                receiverId: receiverId,
+                amount: amountToSend,
+                location: senderLocation, // ✅ Location is now included
+            }),
+        });
 
-      const data = await response.json();
-      console.log("Payment Response:", data); // ✅ Debugging
+        const data = await response.json();
+        console.log("Payment Response:", data);
 
-      if (!response.ok) {
-        throw new Error(data.message || "Payment failed");
-      }
+        if (!response.ok) {
+            throw new Error(data.message || "Payment failed");
+        }
 
-      const newBalance = userBalance - amountToSend;
-      setLastPaymentAmount(amountToSend); // Store the last payment amount
-      setShowSuccessModal(true);
-      setMessage(""); // Reset input
-      setShowMessageInput(false);
+        setLastPaymentAmount(amountToSend);
+        setShowSuccessModal(true);
+        setMessage(""); 
+        setShowMessageInput(false);
     } catch (error) {
-      console.error("Payment error:", error);
-      Alert.alert("Payment Failed", error.message);
+        console.error("Payment error:", error);
+        Alert.alert("Payment Failed", error.message);
     }
-  };
+};
 
   return (
     <View style={styles.container}>
