@@ -41,3 +41,78 @@
    ```bash
    git clone https://github.com/Aryansurve/ClickPay-Payment_App.git
    cd ClickPay-Payment_App
+   ```
+
+2. **Install frontend dependencies**
+   ```bash
+   cd SimplePaymentApp
+   npm install
+   ```
+
+3. **Install backend dependencies**
+   ```bash
+   cd ../backend
+   npm install
+   ```
+
+4. **Start the backend server**
+   ```bash
+   npm start
+   ```
+
+5. **Run the app using Expo**
+   ```bash
+   cd ../SimplePaymentApp
+   expo start
+   ```
+
+---
+
+## 📂 Project Structure
+
+```
+ClickPay-Payment_App/
+│
+├── backend/              # Express.js backend with MongoDB
+│   └── routes/
+│   └── models/
+│   └── controllers/
+│
+├── SimplePaymentApp/     # React Native app
+│   └── screens/
+│   └── components/
+│   └── assets/
+│
+├── README.md
+└── package.json
+```
+
+---
+
+## ✨ Future Enhancements
+
+- Add UPI and QR Code payment support
+- Multi-currency wallet integration
+- Admin dashboard for transaction management
+- Push notifications for payment alerts
+
+---
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome!  
+Feel free to open an issue or create a pull request.
+
+---
+
+## 📬 Contact
+
+**Developer**: Aryan Ulhas Surve  
+**GitHub**: [@Aryansurve](https://github.com/Aryansurve)
+
+---
+
+## 📝 License
+
+This project is licensed under the MIT License.
+
