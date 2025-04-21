@@ -57,13 +57,13 @@
 
 4. **Start the backend server**
    ```bash
-   npm start
+   npm run dev
    ```
 
 5. **Run the app using Expo**
    ```bash
    cd ../SimplePaymentApp
-   expo start
+   npm expo start
    ```
 
 ---
